@@ -1,4 +1,4 @@
-## Why Langgrapgh Exist
+## Why Langgrapgh When we had Langchain
 - for projects with complex flow digram (non-linear)
     - Have Loop
     - Have condition 
@@ -46,3 +46,46 @@
 - refer to how easily you can moniter, debug and understand what you workflow is doing it runetime.
 - for this we use, LangSmith(Can't understand glue code)
 - very tight, bith LG and LS is connected
+
+
+## LangGraph Core Concepts
+- orchestration framework to create intelligent and, stateful and multi-step workflow
+
+1) LLM workflow: series of Taks for exection, that use LLM in sometask
+- Common workflows 
+    - Promt Chaining (e.g: topic->outline->detail report)
+    - Routing, (use as Decision making, and then execute based on that )
+    - Pareallization (task ->subtask, and run subtask parallel), like youtube content Moderation
+    - Orchestrator (task-> multi parellel subtask), but each subtask work is not predefined
+    - Evaulater optimizer (have Generator LLM and Evaulater LLM, until Evaluter satstified), norally use to creative things
+
+2) Gragh, Node and Edge
+- each taks can ne a node (python fuction) and the whole workflow can be represted as graph
+- edges tell use, how node are connected (sequentail, parellel, branching and Loops)
+
+3) State
+- for LLM workflow we need some data throughout the execution, 
+- State is Dict (key-values pair) that have all the data for LLM workflow and it pass through all the nodes
+- State is shared and mutubale for each Node
+
+4) Reducers
+- for workflow like chatbot mutubale states is bad things
+- Reducers define how a state will change by nodes
+- Each key can have it's own reducer
+
+5) LangGrapgh Execution Model
+- inpired from Google pregel
+- Step 1: Grapgh Deficntion
+    - state, Nodes and edges
+- Step 2:Complilation
+.compile(), check for structure of graph
+
+- step 3: Invocation
+- run the graph
+- send intital state to first Node
+
+- Step 4: Super step began
+- internmediate Nodes
+
+- step 4 : terminate
+- last node gets state, and things terminate
