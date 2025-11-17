@@ -1,5 +1,5 @@
 import streamlit as st
-from L7_LangGraph_Project_backend import chatbot_workflows , HumanMessage , AIMessage
+from L7_LangGraph_Project_backend import chatbot_workflows , HumanMessage , AIMessage , get_all_threads
 import uuid
 
 # Utility fucntions
@@ -49,7 +49,7 @@ if 'thread_id' not in st.session_state:
     st.session_state['thread_id'] = generate_thread_id()
     
 if 'thread_ids' not in st.session_state:
-    st.session_state['thread_ids'] = []
+    st.session_state['thread_ids'] = get_all_threads()
 
 add_thread_id(st.session_state['thread_id'])
 
