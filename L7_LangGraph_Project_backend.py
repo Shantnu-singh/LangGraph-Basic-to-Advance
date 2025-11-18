@@ -44,6 +44,8 @@ def chat(state:ChatState)->ChatState:
     chat_chain = llm_openai | parser
     
     ai_msg = chat_chain.invoke(state['msg'])
+    ai_msg = AIMessage(content=str(ai_msg))
+
     return {"msg" : [ai_msg]}
 
 # create graph
