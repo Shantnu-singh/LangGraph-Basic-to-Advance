@@ -21,6 +21,7 @@ def add_thread_id(thread_id):
 def load_thread_id_chat(thread_id):
     config = {"configurable" : {"thread_id" : thread_id}}
     
+    print(chatbot_workflows.get_state(config= config).values)
     if "msg" in chatbot_workflows.get_state(config= config).values:
         chat_hist = chatbot_workflows.get_state(config= config).values['msg']
     
@@ -62,7 +63,7 @@ with st.sidebar:
         start_new_chat()
     st.header("My Conversations")
     
-    for thread_id in st.session_state['thread_ids']:
+    for thread_id in st.session_state['thread_ids'][::-1]:
         if st.button(str(thread_id)):
             st.session_state['thread_id'] = thread_id
             load_thread_id_chat(thread_id)
