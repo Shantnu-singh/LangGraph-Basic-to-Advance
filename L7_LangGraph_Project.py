@@ -1,5 +1,5 @@
 import streamlit as st
-from L7_LangGraph_Project_backend import chatbot_workflows , HumanMessage 
+from L7_LangGraph_Project_backend import chatbot_workflows , HumanMessage , AIMessage
 import uuid
 
 # Utility fucntions
@@ -17,6 +17,27 @@ def start_new_chat():
 def add_thread_id(thread_id):
     if thread_id not in st.session_state['thread_ids']:
         st.session_state['thread_ids'].append(thread_id)
+
+def load_thread_id_chat(thread_id):
+    config = {"configurable" : {"thread_id" : thread_id}}
+    
+    if "msg" in chatbot_workflows.get_state(config= config).values:
+        chat_hist = chatbot_workflows.get_state(config= config).values['msg']
+    
+        temp_msg = []
+        
+        for msg in chat_hist:
+            if isinstance(msg , HumanMessage):
+                role = "user"
+            else:
+                role = "assistant"
+            temp_msg.append({"role" : role , "content" : msg.content})
+            
+        st.session_state['msg_hist'] = temp_msg
+    else:
+        st.session_state['msg_hist'] = []
+
+    
     
 
 # Streamlit session state is a Dict, after you press enter it stay that way
@@ -42,7 +63,9 @@ with st.sidebar:
     st.header("My Conversations")
     
     for thread_id in st.session_state['thread_ids']:
-        st.button(str(thread_id))
+        if st.button(str(thread_id)):
+            st.session_state['thread_id'] = thread_id
+            load_thread_id_chat(thread_id)
 
 
 # Hist of all the msg
@@ -71,5 +94,5 @@ if user_msg:
     with st.chat_message("assistant"):
         ai_msg = st.write_stream(msg_chunk.content for msg_chunk, _ in stream_reponce)
     
-    st.session_state['msg_hist'].append({'role' : "assistant", "content" : ai_msg})
+    st.session_state['msg_hist'].append({'role' : "assistant", "content" : AIMessage(content=ai_msg)})
 
