@@ -35,6 +35,8 @@ import operator
 from langchain_core.messages import BaseMessage , HumanMessage , AIMessage
 from langgraph.graph.message import add_messages
 from langgraph.checkpoint.memory import MemorySaver
+from langgraph.checkpoint.sqlite import SqliteSaver 
+import sqlite3
 
 
 class ChatState(TypedDict):
@@ -52,7 +54,8 @@ def chat(state:ChatState)->ChatState:
 graph = StateGraph(ChatState)
 
 # creating checkpointer
-checkpointer = MemorySaver()
+conn = sqlite3.connect(database="chatbot.db" , check_same_thread=False)
+checkpointer = SqliteSaver(conn)
 
 graph.add_node("chat_Node" , chat)
 
@@ -60,3 +63,12 @@ graph.add_edge(START , "chat_Node")
 graph.add_edge("chat_Node" , END)
 
 chatbot_workflows = graph.compile(checkpointer= checkpointer)
+
+def get_all_threads():
+    result = set()
+    for checkpoint in checkpointer.list(None):
+        result.add(checkpoint.config['configurable']['thread_id'])
+    return list(result)
+
+if __name__ == "__main__":
+    print(get_all_threads())
