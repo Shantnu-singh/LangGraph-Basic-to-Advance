@@ -32,7 +32,7 @@ llm_openai = AzureChatOpenAI(
 from langgraph.graph import StateGraph , START , END
 from typing import TypedDict , Annotated
 import operator
-from langchain_core.messages import BaseMessage , HumanMessage
+from langchain_core.messages import BaseMessage , HumanMessage , AIMessage
 from langgraph.graph.message import add_messages
 from langgraph.checkpoint.memory import MemorySaver
 
