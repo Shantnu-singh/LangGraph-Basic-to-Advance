@@ -2,6 +2,8 @@ import streamlit as st
 from L7_LangGraph_Project_backend import chatbot_workflows , HumanMessage 
 st.title("Simple Chabot")
 
+# Utility Fucntion
+
 # Streamlit session state is a Dict, after you press enter it stay that way
 if "msg_hist" not in st.session_state:
     st.session_state['msg_hist'] = []
@@ -26,9 +28,11 @@ if user_msg:
     # Reply from LLM
     config = {"configurable" : {"thread_id" : "1"}}
 
-    responce = chatbot_workflows.invoke({"msg" : HumanMessage(content = user_msg)} , config = config)
-    ai_msg = responce['msg'][-1].content
+    # Instead of invoke use "stream" for streaming
+    stream_reponce = chatbot_workflows.stream({"msg" : HumanMessage(content = user_msg)} , config = config , stream_mode="messages")
+    
+    with st.chat_message("assistant"):
+        ai_msg = st.write_stream(msg_chunk.content for msg_chunk, _ in stream_reponce)
     
     st.session_state['msg_hist'].append({'role' : "assistant", "content" : ai_msg})
-    with st.chat_message("assistant"):
-        st.write(ai_msg)
+
