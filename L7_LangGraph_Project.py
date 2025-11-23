@@ -22,6 +22,13 @@ if user_msg:
     with st.chat_message("user"):
         st.write(user_msg)
     
-    st.session_state['msg_hist'].append({'role' : "assistant", "content" : user_msg})
+    
+    # Reply from LLM
+    config = {"configurable" : {"thread_id" : "1"}}
+
+    responce = chatbot_workflows.invoke({"msg" : HumanMessage(content = user_msg)} , config = config)
+    ai_msg = responce['msg'][-1].content
+    
+    st.session_state['msg_hist'].append({'role' : "assistant", "content" : ai_msg})
     with st.chat_message("assistant"):
-        st.write(user_msg)
+        st.write(ai_msg)
