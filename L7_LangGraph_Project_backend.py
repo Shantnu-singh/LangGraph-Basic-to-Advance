@@ -1,6 +1,6 @@
 # Model calling and intial setup
 import os
-from langchain_google_genai import ChatGoogleGenerativeAI
+# from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_openai import AzureChatOpenAI
 from dotenv import load_dotenv
 from langchain_core.prompts import PromptTemplate
@@ -18,7 +18,7 @@ AZURE_CHAT_DEPLIOYMENT_NAME = os.getenv("AZURE_CHAT_DEPLIOYMENT_NAME")
 
 parser = StrOutputParser()
 
-llm_gemini = ChatGoogleGenerativeAI(model="gemini-2.0-flash" , api_key= GOOGLE_API_KEY)
+# llm_gemini = ChatGoogleGenerativeAI(model="gemini-2.0-flash" , api_key= GOOGLE_API_KEY)
 
 llm_openai = AzureChatOpenAI(
     model="gpt-4o-mini",                         
