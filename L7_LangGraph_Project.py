@@ -1,6 +1,10 @@
 import streamlit as st
 from L7_LangGraph_Project_backend import chatbot_workflows , HumanMessage , AIMessage , get_all_threads
+from dotenv import load_dotenv
 import uuid
+
+load_dotenv(override= True)
+
 
 # Utility fucntions
 def generate_thread_id():
@@ -38,8 +42,6 @@ def load_thread_id_chat(thread_id):
     else:
         st.session_state['msg_hist'] = []
 
-    
-    
 
 # Streamlit session state is a Dict, after you press enter it stay that way
 if "msg_hist" not in st.session_state:
@@ -87,7 +89,7 @@ if user_msg:
     
     
     # Reply from LLM
-    config = {"configurable" : {"thread_id" : st.session_state['thread_id']}}
+    config = {"configurable" : {"thread_id" : st.session_state['thread_id']} , "metadata" : {"thread_id" : st.session_state['thread_id']} , "run_name" : "chat_run" }
 
     # Instead of invoke use "stream" for streaming
     stream_reponce = chatbot_workflows.stream({"msg" : HumanMessage(content = user_msg)} , config = config , stream_mode="messages")
